@@ -33,5 +33,32 @@ jobs:
         if: ${{ matrix.java == '21' }} # Only upload artifacts built from latest java
         uses: actions/upload-artifact@v4
         with:
-          name: Artifacts
+          name: build-artifacts
           path: build/libs/
+
+  publish:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: build/libs/
+
+      - uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          # Only include this section if you wish to publish
+          # your assets on Modrinth.
+          modrinth-id: kEdo9yMz
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+
+          # Only include this section if you wish to publish
+          # your assets on CurseForge.
+          #curseforge-id: 394468
+          #curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+
+          # Only include this section if you wish to publish
+          # your assets on GitHub.
+          github-token: ${{ secrets.GITHUB_TOKEN }}
