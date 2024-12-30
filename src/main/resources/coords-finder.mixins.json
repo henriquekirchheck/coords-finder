@@ -1,0 +1,11 @@
+{
+	"required": true,
+	"package": "br.dev.henriquekh.coords_finder.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"ExampleMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
