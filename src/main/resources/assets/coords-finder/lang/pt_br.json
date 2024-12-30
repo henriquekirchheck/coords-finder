@@ -1,0 +1,5 @@
+{
+  "coords-finder.success": "Jogador %1$s está localizado em %2$s no %3$s",
+  "coords-finder.error": "Jogador especificado não foi encontrado",
+  "coords-finder.disabled": "/coords foi desativado por um administrador"
+}

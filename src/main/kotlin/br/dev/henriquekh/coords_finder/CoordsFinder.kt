@@ -51,12 +51,22 @@ object CoordsFinder : ModInitializer {
     player: ServerPlayerEntity? = command.source.player,
   ): Int {
     if (disabled) {
-      command.source.sendMessage(Text.translatable("coords-finder.disabled"))
+      command.source.sendMessage(
+        Text.translatableWithFallback(
+          "coords-finder.disabled",
+          "/coords was deactivated by a administrator"
+        )
+      )
       return 0
     }
 
     if (player == null) {
-      command.source.sendMessage(Text.translatable("coords-finder.error"))
+      command.source.sendMessage(
+        Text.translatableWithFallback(
+          "coords-finder.error",
+          "Specified Player was not found"
+        )
+      )
       return 0
     }
 
@@ -64,8 +74,9 @@ object CoordsFinder : ModInitializer {
 
     command.source.server.playerManager.playerList.forEach { player ->
       player.sendMessage(
-        Text.translatable(
+        Text.translatableWithFallback(
           "coords-finder.success",
+          "Player %1\$s is located at %2\$s on %3\$s",
           player.displayName,
           Text.literal("XYZ: ").append(x.toString()).append(" ")
             .append(y.toString()).append(" ")
