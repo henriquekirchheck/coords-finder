@@ -72,8 +72,8 @@ object CoordsFinder : ModInitializer {
 
     val (x, y, z) = player.blockPos
 
-    command.source.server.playerManager.playerList.forEach { player ->
-      player.sendMessage(
+    command.source.server.playerManager.playerList.forEach { playerMsg ->
+      playerMsg.sendMessage(
         Text.translatableWithFallback(
           "coords-finder.success",
           "Player %1\$s is located at %2\$s on %3\$s",
