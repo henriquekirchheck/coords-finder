@@ -7,7 +7,14 @@
       url = "github:numtide/flake-utils";
       inputs.systems.follows = "systems";
     };
-    nix-jebrains-plugins.url = "github:theCapypara/nix-jebrains-plugins";
+    nix-jebrains-plugins = {
+      url = "github:theCapypara/nix-jebrains-plugins";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+	systems.follows = "systems";
+	flake-utils.follows = "flake-utils";
+      };
+    };
   };
   outputs = { self, nixpkgs, flake-utils, nix-jebrains-plugins, ... }:
     flake-utils.lib.eachDefaultSystem (system:
@@ -18,27 +25,31 @@
         };
         lib = pkgs.lib;
 
-        javaVersion = 21;
-        extraIdeaPlugins = [
+	jdk = pkgs.jetbrains.jdk-no-jcef;
+
+        ideaPlugins = [
           "com.github.catppuccin.jetbrains"
           "com.github.catppuccin.jetbrains_icons"
 	  "com.intellij.plugins.vscodekeymap"
+	  "com.demonwav.minecraft-dev"
+	  "me.shedaniel.architectury"
+	  "IdeaVIM"
+	  "org.toml.lang"
         ];
       in {
         overlays.default = (final: prev:
-          let jdk = prev."jdk${toString javaVersion}";
-          in {
+          {
             maven = prev.maven.override { jdk_headless = jdk; };
             gradle = prev.gradle.override { java = jdk; };
             kotlin = prev.kotlin.override { jre = jdk; };
-            my_jdk = jdk;
+	    my_jdk = jdk;
           });
 
         packages.jetbrainsIde =
           (pkgs.jetbrains.plugins.addPlugins pkgs.jetbrains.idea-community-bin
             (map (plugin:
-              nix-jebrains-plugins.plugins.${system}.idea-community."2024.3".${plugin})
-              ([ "com.demonwav.minecraft-dev" ] ++ extraIdeaPlugins)));
+              nix-jebrains-plugins.plugins.${system}.idea-community."2025.2".${plugin})
+              (ideaPlugins)));
 
         devShells = {
           default = pkgs.mkShell rec {
@@ -71,7 +82,7 @@
               xorg.libXrandr
               xorg.libXxf86vm
 
-              glxinfo
+              mesa-demos
               pciutils # need lspci
               xorg.xrandr # needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
             ];

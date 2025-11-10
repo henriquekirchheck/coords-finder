@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "coords_finder",
+  "version": "${version}",
+  "name": "/coords {player}",
+  "description": "This server side mod adds a simple command to display a player's coordinates in chat.",
+  "authors": [
+    {
+      "name": "Henrique Kirch Heck",
+      "contact": {
+        "email": "me@henriquekh.dev.br"
+      }
+    }
+  ],
+  "contact": {
+    "homepage": "https://github.com/henriquekirchheck/coords-finder",
+    "sources": "git+https://github.com/henriquekirchheck/coords-finder",
+    "issues": "https://github.com/henriquekirchheck/coords-finder/issues"
+  },
+  "license": "LGPL-3.0-or-later",
+  "icon": "assets/coords_finder/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "br.dev.henriquekh.coords_finder.fabric.CoordsFinderFabric"
+    ]
+  },
+  "mixins": [
+    "coords_finder.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.18.0",
+    "minecraft": "~1.21.9",
+    "java": ">=21",
+    "architectury": ">=18.0.6",
+    "fabric-api": "*"
+  }
+}

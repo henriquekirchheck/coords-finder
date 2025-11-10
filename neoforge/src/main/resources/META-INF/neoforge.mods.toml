@@ -1,0 +1,38 @@
+modLoader = "javafml"
+loaderVersion = "[10,)"
+issueTrackerURL = "https://github.com/henriquekirchheck/coords-finder/issues"
+license = "LGPL-3.0-or-later"
+
+[[mods]]
+modId = "coords_finder"
+version = "${version}"
+displayName = "/coords {player}"
+authors = "Henrique Kirch Heck <me@henriquekh.dev.br>"
+description = "This server side mod adds a simple command to display a player's coordinates in chat."
+logoFile = "assets/coords_finder/icon.png"
+modUrl = "https://github.com/henriquekirchheck/coords-finder"
+displayURL = "https://github.com/henriquekirchheck/coords-finder"
+
+[[dependencies.coords_finder]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.10,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.coords_finder]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.10,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.coords_finder]]
+modId = "architectury"
+type = "required"
+versionRange = "[18.0.6,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[mixins]]
+config = "coords_finder.mixins.json"
