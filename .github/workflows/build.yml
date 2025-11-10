@@ -4,52 +4,56 @@
 # against bad commits.
 
 name: build
-on: [pull_request, push]
+on:
+  - pull_request
+  - push
+  - workflow_dispatch
 
 jobs:
   build:
-    strategy:
-      matrix:
-        # Use these Java versions
-        java: [
-          21,    # Current Java LTS
-        ]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: checkout repository
-        uses: actions/checkout@v4
-      - name: validate gradle wrapper
-        uses: gradle/wrapper-validation-action@v2
-      - name: setup jdk ${{ matrix.java }}
+        uses: actions/checkout@v5
+      - name: setup jdk
         uses: actions/setup-java@v4
         with:
-          java-version: ${{ matrix.java }}
-          distribution: 'microsoft'
+          java-version: 21
+          distribution: 'temurin'
+      - name: setup gradle
+        uses: gradle/actions/setup-gradle@v5
+        with:
+          dependency-graph: generate-and-submit
       - name: make gradle wrapper executable
         run: chmod +x ./gradlew
       - name: build
         run: ./gradlew build
       - name: capture build artifacts
-        if: ${{ matrix.java == '21' }} # Only upload artifacts built from latest java
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
-          path: build/libs/
+          path: "*/build/libs/*.jar"
 
   publish:
     if: startsWith(github.ref, 'refs/tags/v')
     needs: build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - uses: actions/download-artifact@v4
+      - name: download artifacts
+        uses: actions/download-artifact@v5
         with:
           name: build-artifacts
-          path: build/libs/
-
-      - uses: Kir-Antipov/mc-publish@v3.3
+      - name: display downloaded artifacts
+        run: ls -R
+      - name: publish mods
+        uses: Kira-NT/mc-publish@v3.3
         with:
+          files: |
+            {fabric,neoforge}/build/libs/*+([0-9]).+([0-9]).+([0-9]).jar
           # Only include this section if you wish to publish
           # your assets on Modrinth.
           modrinth-id: kEdo9yMz
