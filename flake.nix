@@ -53,6 +53,8 @@
 
         devShells = {
           default = pkgs.mkShell rec {
+            packages = [self.packages.${system}.jetbrainsIde];
+
             nativeBuildInputs = with pkgs; [
               gcc
               gradle

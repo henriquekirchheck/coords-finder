@@ -5,9 +5,9 @@
 
 name: build
 on:
-  - pull_request
-  - push
-  - workflow_dispatch
+  push:
+      tags:
+        - '*'
 
 jobs:
   build:
@@ -29,9 +29,7 @@ jobs:
       - name: make gradle wrapper executable
         run: chmod +x ./gradlew
       - name: build
-        run: ./gradlew build
-      - name: capture build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifacts
-          path: "*/build/libs/*.jar"
+        run: ./gradlew build publishUnified
+        env:
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
