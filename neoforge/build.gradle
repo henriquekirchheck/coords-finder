@@ -58,3 +58,34 @@ remapJar {
     inputFile.set shadowJar.archiveFile
 }
 
+unifiedPublishing {
+    project {
+        gameVersions = ["1.21.10"]
+        gameLoaders = ["neoforge"]
+
+        mainPublication tasks.remapJar
+
+        relations {
+            depends {
+                curseforge = "architectury-api"
+                modrinth = "architectury-api"
+            }
+        }
+
+        var cfToken = System.getenv("CURSEFORGE_TOKEN")
+        if (cfToken != null) {
+            curseforge {
+                token = cfToken
+                id = rootProject.curseforge_id // Required, must be a string, ID of CurseForge project
+            }
+        }
+
+        var mrToken = System.getenv("MODRINTH_TOKEN")
+        if (mrToken != null) {
+            modrinth {
+                token = mrToken
+                id = rootProject.modrinth_id // Required, must be a string, ID of Modrinth project
+            }
+        }
+    }
+}
